@@ -12,8 +12,8 @@
   }
   *{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
   body{
-    margin:0; min-height:100vh; display:flex; align-items:center; justify-content:center;
-    gap:48px; padding:40px 24px; background:#eef1f0;
+    margin:0; height:100vh; overflow:hidden; display:flex; align-items:center; justify-content:center;
+    background:#eef1f0;
     font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif; color:var(--text);
   }
   /* ---------- 手机外壳 ---------- */
@@ -21,6 +21,7 @@
     width:390px; height:780px; background:var(--bg); border-radius:44px;
     box-shadow:0 24px 64px rgba(16,40,32,.22), 0 0 0 10px #1b1f1d, 0 0 0 12px #2e3431;
     display:flex; flex-direction:column; overflow:hidden; position:relative;
+    transform-origin:center center;
   }
   .statusbar{
     height:34px; flex:0 0 34px; background:var(--primary); color:#fff;
@@ -267,7 +268,7 @@
   .agree .link{ color:var(--primary); }
   .actions2{ margin-top:22px; display:flex; flex-direction:column; gap:11px; }
 
-  @media (max-width:900px){ body{ padding:16px; } .phone{ transform-origin:top center; } }
+  @media (max-width:900px){ body{ padding:0 !important; } }
 </style>
 </head>
 <body>
@@ -959,10 +960,25 @@ const A = {
   toast
 };
 
-/* 初始化：预置一个待收货订单，方便查看订单页 */
+/* ================= 自适应缩放：保证一屏放下 ================= */
+const PHONE_W = 414;   // 390 + 外圈 24
+const PHONE_H = 804;   // 780 + 外圈 24
+function fitPhone(){
+  const el = document.querySelector('.phone');
+  if (!el) return;
+  const s = Math.min(1,
+    (window.innerHeight - 28) / PHONE_H,
+    (window.innerWidth - 16) / PHONE_W);
+  el.style.transform = 'scale(' + s.toFixed(4) + ')';
+}
+window.addEventListener('resize', fitPhone);
+window.addEventListener('orientationchange', fitPhone);
+
+/* 初始化 */
 (function init(){
   state.tmpAvatar = 0; state.agree = false;
   render();
+  fitPhone();
 })();
 </script>
 </body>

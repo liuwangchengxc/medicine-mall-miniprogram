@@ -1,0 +1,91 @@
+<view class="page">
+
+  <!-- 头部 -->
+  <view class="hero">
+    <view class="u-row" bindtap="goLogin">
+      <view class="avatar">
+        <text wx:if="{{user}}">{{user.avatar}}</text>
+        <text wx:else class="avatar-ph">👤</text>
+      </view>
+      <view class="u-info">
+        <view class="u-name">{{userName}}</view>
+        <view class="u-sub" wx:if="{{user}}">已绑定 {{user.phoneMask}} · 普通会员</view>
+        <view class="u-sub" wx:else>登录后可查看订单与用药记录</view>
+      </view>
+      <text class="u-arrow" wx:if="{{!user}}">›</text>
+    </view>
+    <view class="quick">
+      <view class="quick-item" bindtap="goCart">
+        <text class="q-num">{{cartCount}}</text>
+        <text class="q-txt">购物车</text>
+      </view>
+      <view class="quick-item" data-status="all" bindtap="goOrder">
+        <text class="q-num">{{counts.unpaid + counts.undelivered + counts.shipping + counts.done}}</text>
+        <text class="q-txt">全部订单</text>
+      </view>
+      <view class="quick-item">
+        <text class="q-num">0</text>
+        <text class="q-txt">优惠券</text>
+      </view>
+      <view class="quick-item">
+        <text class="q-num">0</text>
+        <text class="q-txt">问诊记录</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 我的订单 -->
+  <view class="card-flat">
+    <view class="sec-head">
+      <text class="sec-title">我的订单</text>
+      <view class="sec-more" data-status="all" bindtap="goOrder">查看全部 ›</view>
+    </view>
+    <view class="order-tabs">
+      <view class="ot-item" data-status="unpaid" bindtap="goOrder">
+        <text class="ot-ico">💰</text>
+        <text class="ot-txt">待付款</text>
+        <text wx:if="{{counts.unpaid > 0}}" class="ot-badge">{{counts.unpaid}}</text>
+      </view>
+      <view class="ot-item" data-status="undelivered" bindtap="goOrder">
+        <text class="ot-ico">📦</text>
+        <text class="ot-txt">待发货</text>
+        <text wx:if="{{counts.undelivered > 0}}" class="ot-badge">{{counts.undelivered}}</text>
+      </view>
+      <view class="ot-item" data-status="shipping" bindtap="goOrder">
+        <text class="ot-ico">🚚</text>
+        <text class="ot-txt">待收货</text>
+        <text wx:if="{{counts.shipping > 0}}" class="ot-badge">{{counts.shipping}}</text>
+      </view>
+      <view class="ot-item" data-status="done" bindtap="goOrder">
+        <text class="ot-ico">✅</text>
+        <text class="ot-txt">已完成</text>
+        <text wx:if="{{counts.done > 0}}" class="ot-badge">{{counts.done}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 功能菜单 -->
+  <view class="card-flat">
+    <view
+      class="menu-item"
+      wx:for="{{menu}}"
+      wx:key="id"
+      data-id="{{item.id}}"
+      bindtap="onMenu"
+    >
+      <text class="m-ico">{{item.icon}}</text>
+      <text class="m-name">{{item.name}}</text>
+      <text class="m-arrow">›</text>
+    </view>
+  </view>
+
+  <!-- 退出登录 -->
+  <view wx:if="{{user}}" class="logout" bindtap="logout">退出登录</view>
+
+  <!-- 合规提示 -->
+  <view class="foot-tip">
+    本小程序为演示项目，商品、价格、资质信息均为示例数据，不提供真实药品销售服务。
+    实际经营需取得《药品经营许可证》《互联网药品信息服务资格证书》等资质。
+  </view>
+
+</view>

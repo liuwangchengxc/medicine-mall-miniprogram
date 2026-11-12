@@ -1,0 +1,103 @@
+.page { padding-bottom: 20rpx; }
+
+/* ---------- 地址 ---------- */
+.addr { display: flex; align-items: center; }
+.addr-ico { font-size: 32rpx; margin-right: 16rpx; }
+.addr-body { flex: 1; min-width: 0; }
+.addr-top { display: flex; align-items: baseline; }
+.addr-name { font-size: 30rpx; font-weight: 600; }
+.addr-phone { font-size: 24rpx; color: #9aa3ab; margin-left: 16rpx; }
+.addr-detail { font-size: 24rpx; color: #5c6670; margin-top: 8rpx; line-height: 1.5; }
+.addr-arrow { color: #c2c8ce; font-size: 36rpx; margin-left: 8rpx; }
+
+/* ---------- 商品清单 ---------- */
+.oc-item {
+  display: flex;
+  align-items: center;
+  padding: 22rpx 24rpx;
+}
+.oc-item + .oc-item { border-top: 1rpx solid #f2f4f5; }
+.oc-thumb { width: 130rpx; height: 130rpx; flex-shrink: 0; }
+.oc-body { flex: 1; margin-left: 18rpx; min-width: 0; }
+.oc-name {
+  font-size: 28rpx;
+  font-weight: 500;
+  line-height: 1.4;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+.oc-spec { font-size: 22rpx; color: #9aa3ab; margin-top: 6rpx; }
+.oc-rx {
+  display: inline-block;
+  font-size: 20rpx;
+  color: #c2410c;
+  background: #fff1e6;
+  padding: 2rpx 8rpx;
+  border-radius: 4rpx;
+  margin-top: 8rpx;
+}
+.oc-right { text-align: right; margin-left: 12rpx; }
+.oc-count { font-size: 22rpx; color: #9aa3ab; margin-top: 4rpx; }
+
+/* ---------- 通用行标题 ---------- */
+.row-title { font-size: 28rpx; font-weight: 600; margin-bottom: 16rpx; }
+
+/* ---------- 处方上传 ---------- */
+.rx-upload {
+  height: 150rpx;
+  border: 2rpx dashed #d5dde3;
+  border-radius: 12rpx;
+  background: #fafbfc;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.rx-upload-ico { font-size: 40rpx; color: #b6bdc4; line-height: 1; }
+.rx-upload-ico.ok { color: #12996f; }
+.rx-upload-txt { font-size: 24rpx; color: #9aa3ab; margin-top: 10rpx; }
+.rx-upload-txt.ok { color: #12996f; }
+.rx-note { font-size: 20rpx; color: #b6bdc4; margin-top: 12rpx; line-height: 1.6; }
+
+/* ---------- 备注 ---------- */
+.remark {
+  width: 100%;
+  height: 120rpx;
+  font-size: 26rpx;
+  line-height: 1.6;
+  background: #fafbfc;
+  border-radius: 12rpx;
+  padding: 16rpx;
+  box-sizing: border-box;
+}
+.remark-ph { color: #b6bdc4; }
+
+/* ---------- 金额 ---------- */
+.fee-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12rpx 0;
+}
+.fee-label { font-size: 26rpx; color: #5c6670; }
+.fee-val { font-size: 26rpx; color: #1f2329; }
+.fee-row.total { padding-top: 20rpx; }
+.fee-row.total .fee-label { font-weight: 600; color: #1f2329; }
+
+/* ---------- 安全提示 ---------- */
+.safe-tip {
+  font-size: 20rpx;
+  color: #b6bdc4;
+  line-height: 1.7;
+  padding: 8rpx 40rpx 0;
+}
+
+/* ---------- 底部栏 ---------- */
+.bottom-holder { height: 140rpx; }
+.pay-info { flex: 1; }
+.pay-line { display: flex; align-items: baseline; }
+.pay-label { font-size: 24rpx; color: #5c6670; margin-right: 6rpx; }
+.pay-sub { font-size: 20rpx; color: #9aa3ab; margin-top: 2rpx; }
+.submit-btn { width: 260rpx; height: 80rpx; line-height: 80rpx; }

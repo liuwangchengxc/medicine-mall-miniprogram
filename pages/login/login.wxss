@@ -1,0 +1,87 @@
+.page { padding: 0 20rpx 60rpx; }
+
+/* ---------- 品牌 ---------- */
+.brand {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 80rpx 0 50rpx;
+}
+.logo {
+  width: 140rpx;
+  height: 140rpx;
+  border-radius: 36rpx;
+  background: linear-gradient(135deg, #12996f, #45c79c);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 70rpx;
+  box-shadow: 0 12rpx 32rpx rgba(18, 153, 111, 0.28);
+}
+.brand-name { font-size: 38rpx; font-weight: 600; margin-top: 26rpx; }
+.brand-sub { font-size: 22rpx; color: #9aa3ab; margin-top: 10rpx; }
+
+/* ---------- 表单 ---------- */
+.label { font-size: 26rpx; color: #5c6670; margin-bottom: 16rpx; }
+.avatars { display: flex; margin-bottom: 8rpx; }
+.av {
+  width: 84rpx;
+  height: 84rpx;
+  border-radius: 50%;
+  background: #f4f6f5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 40rpx;
+  margin-right: 16rpx;
+  border: 2rpx solid transparent;
+}
+.av.on {
+  border-color: #12996f;
+  background: #e8f6f0;
+}
+
+.field {
+  display: flex;
+  align-items: center;
+  border-bottom: 1rpx solid #f2f4f5;
+  padding: 26rpx 0 20rpx;
+}
+.field-label { font-size: 28rpx; width: 130rpx; color: #1f2329; }
+.field-input { flex: 1; font-size: 28rpx; }
+.ph { color: #b6bdc4; font-size: 26rpx; }
+.field-note { font-size: 20rpx; color: #b6bdc4; margin-top: 16rpx; line-height: 1.6; }
+
+/* ---------- 协议 ---------- */
+.agree-row {
+  display: flex;
+  align-items: center;
+  padding: 32rpx 8rpx 0;
+}
+.agree-box {
+  width: 34rpx;
+  height: 34rpx;
+  border-radius: 50%;
+  border: 2rpx solid #cfd6dc;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.agree-box.on { background: #12996f; border-color: #12996f; }
+.agree-ico { color: #fff; font-size: 20rpx; line-height: 1; }
+.agree-txt { font-size: 24rpx; color: #5c6670; margin-left: 12rpx; }
+.link { color: #12996f; }
+
+/* ---------- 按钮 ---------- */
+.actions { margin-top: 48rpx; }
+.login-btn { box-shadow: 0 10rpx 24rpx rgba(18, 153, 111, 0.24); }
+.demo-btn { margin-top: 24rpx; }
+
+.tip {
+  font-size: 20rpx;
+  color: #b6bdc4;
+  line-height: 1.7;
+  padding: 40rpx 20rpx 0;
+  text-align: center;
+}

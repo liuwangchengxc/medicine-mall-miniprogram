@@ -1,0 +1,92 @@
+<view class="page">
+
+  <!-- 搜索栏 -->
+  <view class="search-bar">
+    <view class="search-box">
+      <text class="s-ico">🔍</text>
+      <input
+        class="s-input"
+        placeholder="搜索药品名称 / 症状"
+        placeholder-class="s-ph"
+        value="{{keyword}}"
+        confirm-type="search"
+        bindinput="onKeyword"
+        bindconfirm="onSearch"
+      />
+      <text wx:if="{{keyword}}" class="s-clear" bindtap="clearKeyword">✕</text>
+    </view>
+    <view class="s-cart" bindtap="goCart">
+      <text class="s-cart-ico">🛒</text>
+      <text wx:if="{{cartCount > 0}}" class="s-badge">{{cartCount}}</text>
+    </view>
+  </view>
+
+  <!-- 分类筛选 -->
+  <scroll-view class="cats" scroll-x enable-flex show-scrollbar="{{false}}">
+    <view
+      class="cat {{activeCat === item.id ? 'on' : ''}}"
+      wx:for="{{cats}}"
+      wx:key="id"
+      data-id="{{item.id}}"
+      bindtap="onCat"
+    >{{item.name}}</view>
+  </scroll-view>
+
+  <!-- 活动位 -->
+  <scroll-view class="banners" scroll-x enable-flex show-scrollbar="{{false}}">
+    <view
+      class="banner"
+      wx:for="{{banners}}"
+      wx:key="id"
+      style="background:{{item.bg}}"
+    >
+      <view class="banner-txt">
+        <view class="banner-title">{{item.title}}</view>
+        <view class="banner-sub">{{item.sub}}</view>
+      </view>
+      <text class="banner-emoji">{{item.emoji}}</text>
+    </view>
+  </scroll-view>
+
+  <!-- 服务保障 -->
+  <view class="promise">
+    <view class="promise-item" wx:for="{{promises}}" wx:key="text">
+      <text class="p-ico">{{item.icon}}</text>
+      <text class="p-txt">{{item.text}}</text>
+    </view>
+  </view>
+
+  <!-- 商品列表 -->
+  <view class="sec-head">
+    <text class="sec-title">常用药品</text>
+    <text class="sec-count">共 {{list.length}} 件</text>
+  </view>
+
+  <view class="goods-list" wx:if="{{list.length > 0}}">
+    <view class="goods" wx:for="{{list}}" wx:key="id" data-id="{{item.id}}" bindtap="goDetail">
+      <view class="thumb" style="background:{{item.color}}">
+        <text class="thumb-emoji">{{item.emoji}}</text>
+        <text class="rx-flag" wx:if="{{item.rx}}">处方药</text>
+      </view>
+      <view class="g-name">{{item.name}}</view>
+      <view class="g-spec">{{item.spec}}</view>
+      <view class="g-foot">
+        <view class="g-price">
+          <text class="symbol">¥</text><text class="num">{{item.priceText}}</text>
+          <text class="price-gray" wx:if="{{item.originText}}">¥{{item.originText}}</text>
+        </view>
+        <view class="g-add" catchtap="addCart" data-id="{{item.id}}">＋</view>
+      </view>
+    </view>
+  </view>
+
+  <view class="empty" wx:else>
+    <view class="ico">🔎</view>
+    <view class="txt">没有找到相关药品，换个关键词试试</view>
+  </view>
+
+  <view class="foot-note">
+    本页药品信息仅为演示数据，不作为用药依据；处方药须凭医师处方购买
+  </view>
+
+</view>

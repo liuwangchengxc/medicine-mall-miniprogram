@@ -1,0 +1,110 @@
+.page { padding-bottom: 20rpx; }
+
+/* ---------- 主图 ---------- */
+.hero {
+  width: 100%;
+  height: 520rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+.hero-emoji { font-size: 200rpx; }
+.hero-flag {
+  position: absolute;
+  left: 24rpx;
+  bottom: 24rpx;
+  background: rgba(194, 65, 12, 0.92);
+  color: #fff;
+  font-size: 22rpx;
+  padding: 8rpx 16rpx;
+  border-radius: 8rpx;
+}
+
+/* ---------- 价格区 ---------- */
+.price-row { display: flex; align-items: baseline; }
+.price .num.big { font-size: 52rpx; }
+.sales {
+  margin-left: auto;
+  font-size: 22rpx;
+  color: #9aa3ab;
+}
+.title {
+  font-size: 34rpx;
+  font-weight: 600;
+  margin-top: 16rpx;
+  line-height: 1.4;
+}
+.sub-line { font-size: 24rpx; color: #9aa3ab; margin-top: 8rpx; }
+.tag-row { margin-top: 16rpx; }
+
+/* ---------- 厂商 ---------- */
+.info-row { display: flex; align-items: center; }
+.info-label { font-size: 26rpx; color: #9aa3ab; width: 140rpx; }
+.info-value { font-size: 26rpx; flex: 1; }
+
+/* ---------- 说明区块 ---------- */
+.block-title {
+  display: flex;
+  align-items: center;
+  font-size: 28rpx;
+  font-weight: 600;
+  margin-top: 8rpx;
+}
+.block-title:first-child { margin-top: 0; }
+.bar {
+  width: 6rpx;
+  height: 26rpx;
+  background: #12996f;
+  border-radius: 3rpx;
+  margin-right: 12rpx;
+}
+.block-text {
+  font-size: 26rpx;
+  color: #5c6670;
+  line-height: 1.75;
+  margin: 12rpx 0 26rpx;
+}
+.block-text:last-child { margin-bottom: 0; }
+
+/* ---------- 处方提示 ---------- */
+.rx-tip {
+  display: flex;
+  margin: 20rpx;
+  padding: 24rpx;
+  background: #fff8f1;
+  border: 1rpx solid #ffdec2;
+  border-radius: 16rpx;
+}
+.rx-tip-ico { font-size: 36rpx; margin-right: 16rpx; }
+.rx-tip-title { font-size: 26rpx; font-weight: 600; color: #c2410c; }
+.rx-tip-text { font-size: 22rpx; color: #8a6a52; line-height: 1.7; margin-top: 8rpx; }
+
+/* ---------- 底部栏 ---------- */
+.bottom-holder { height: 140rpx; }
+.bar-ico {
+  width: 96rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+}
+.bar-ico-emoji { font-size: 34rpx; }
+.bar-ico-txt { font-size: 20rpx; color: #5c6670; margin-top: 2rpx; }
+.bar-badge {
+  position: absolute;
+  top: -6rpx;
+  right: 12rpx;
+  min-width: 28rpx;
+  height: 28rpx;
+  padding: 0 6rpx;
+  background: #e34d59;
+  color: #fff;
+  font-size: 18rpx;
+  line-height: 28rpx;
+  text-align: center;
+  border-radius: 14rpx;
+}
+.bar-btns { flex: 1; display: flex; margin-left: 12rpx; }
+.bar-btn { flex: 1; height: 76rpx; line-height: 76rpx; font-size: 28rpx; margin-left: 12rpx; }
+.bar-btns .bar-btn:first-child { margin-left: 0; }

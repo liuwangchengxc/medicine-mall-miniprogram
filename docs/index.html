@@ -1,0 +1,987 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>康宁大药房 · 小程序界面预览</title>
+<style>
+  :root{
+    --primary:#12996f; --primary-dark:#0d7d5b; --primary-light:#e8f6f0;
+    --danger:#e34d59; --text:#1f2329; --sub:#5c6670; --muted:#9aa3ab;
+    --line:#eef0f2; --bg:#f4f6f5; --card:#fff;
+  }
+  *{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
+  body{
+    margin:0; min-height:100vh; display:flex; align-items:center; justify-content:center;
+    gap:48px; padding:40px 24px; background:#eef1f0;
+    font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif; color:var(--text);
+  }
+  /* ---------- 手机外壳 ---------- */
+  .phone{
+    width:390px; height:780px; background:var(--bg); border-radius:44px;
+    box-shadow:0 24px 64px rgba(16,40,32,.22), 0 0 0 10px #1b1f1d, 0 0 0 12px #2e3431;
+    display:flex; flex-direction:column; overflow:hidden; position:relative;
+  }
+  .statusbar{
+    height:34px; flex:0 0 34px; background:var(--primary); color:#fff;
+    display:flex; align-items:center; justify-content:space-between;
+    padding:0 22px; font-size:12px; font-weight:600; letter-spacing:.4px;
+  }
+  .navbar{
+    height:44px; flex:0 0 44px; background:var(--primary); color:#fff;
+    display:flex; align-items:center; justify-content:center; font-size:16px; font-weight:600;
+    position:relative;
+  }
+  .navbar .back{
+    position:absolute; left:14px; top:0; height:44px; display:flex; align-items:center;
+    font-size:20px; cursor:pointer; padding:0 6px;
+  }
+  .navbar.plain{ background:var(--primary); }
+  .screen{ flex:1; overflow-y:auto; overflow-x:hidden; position:relative; }
+  .screen::-webkit-scrollbar{ width:0; }
+  .footer{ flex:0 0 auto; background:#fff; }
+  .footer:empty{ display:none; }
+  .tabbar{
+    flex:0 0 58px; height:58px; background:#fff; display:flex;
+    border-top:1px solid var(--line); padding-bottom:4px;
+  }
+  .tabbar.hide{ display:none; }
+  .tabbar .tab{
+    flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center;
+    gap:2px; font-size:10px; color:#8b9299; cursor:pointer; position:relative;
+  }
+  .tabbar .tab.on{ color:var(--primary); font-weight:600; }
+  .tabbar .tab .ico{ font-size:19px; line-height:1; }
+  .tabbar .tab .badge{
+    position:absolute; top:6px; right:calc(50% - 22px); min-width:15px; height:15px;
+    background:var(--danger); color:#fff; font-size:9px; line-height:15px; text-align:center;
+    border-radius:8px; padding:0 3px;
+  }
+
+  /* ---------- 通用 ---------- */
+  .card{ background:var(--card); border-radius:12px; margin:10px; padding:12px; }
+  .card.flush{ padding:0; overflow:hidden; }
+  .row{ display:flex; align-items:center; }
+  .price{ color:var(--danger); font-weight:600; }
+  .price .s{ font-size:11px; }
+  .price .n{ font-size:17px; }
+  .line-through{ color:var(--muted); font-size:11px; text-decoration:line-through; margin-left:4px; }
+  .thumb{
+    display:flex; align-items:center; justify-content:center; border-radius:8px;
+    position:relative; overflow:hidden; flex:0 0 auto;
+  }
+  .btn{
+    height:40px; border-radius:20px; display:flex; align-items:center; justify-content:center;
+    font-size:15px; font-weight:500; cursor:pointer; border:none; width:100%;
+    font-family:inherit;
+  }
+  .btn.primary{ background:var(--primary); color:#fff; }
+  .btn.primary:active{ background:var(--primary-dark); }
+  .btn.ghost{ background:#fff; color:var(--primary); border:1px solid var(--primary); }
+  .btn.disabled{ background:#dfe3e6; color:#a9b1b8; }
+  .tag{ display:inline-block; font-size:10px; line-height:1; padding:3px 5px; border-radius:3px; margin-right:4px; }
+  .tag.green{ color:var(--primary); background:var(--primary-light); }
+  .tag.orange{ color:#c2410c; background:#fff1e6; }
+  .tag.blue{ color:#2563eb; background:#eaf1ff; }
+  .empty{ padding:70px 20px; text-align:center; }
+  .empty .ico{ font-size:46px; opacity:.5; }
+  .empty .txt{ margin-top:10px; color:var(--muted); font-size:13px; }
+  .empty .btn{ width:140px; margin:16px auto 0; }
+  .footnote{ text-align:center; font-size:10px; color:#b6bdc4; line-height:1.6; padding:14px 24px 6px; }
+  .bottombar{
+    background:#fff; padding:8px 12px;
+    display:flex; align-items:center; gap:8px; box-shadow:0 -2px 8px rgba(0,0,0,.05); z-index:5;
+  }
+  .pad-bottom{ height:64px; }
+
+  /* ---------- 首页 ---------- */
+  .searchwrap{
+    display:flex; align-items:center; gap:8px; padding:8px 12px;
+    background:linear-gradient(180deg,var(--primary) 0%,var(--primary) 60%,rgba(18,153,111,0) 100%);
+    position:sticky; top:0; z-index:6;
+  }
+  .searchbox{ flex:1; height:34px; background:#fff; border-radius:17px; display:flex; align-items:center; padding:0 12px; gap:6px; }
+  .searchbox input{ flex:1; border:none; outline:none; font-size:13px; font-family:inherit; background:transparent; }
+  .searchbox input::placeholder{ color:#b6bdc4; }
+  .carticon{ width:32px; height:32px; display:flex; align-items:center; justify-content:center; font-size:19px; position:relative; cursor:pointer; }
+  .cats{ display:flex; gap:6px; padding:6px 12px 10px; background:var(--primary); overflow-x:auto; }
+  .cats::-webkit-scrollbar{ height:0; }
+  .cat{ flex:0 0 auto; font-size:12px; color:rgba(255,255,255,.85); padding:5px 11px; border-radius:13px; cursor:pointer; }
+  .cat.on{ background:#fff; color:var(--primary); font-weight:600; }
+  .banners{ display:flex; gap:8px; padding:10px 10px 2px; overflow-x:auto; }
+  .banners::-webkit-scrollbar{ height:0; }
+  .banner{
+    flex:0 0 260px; height:84px; border-radius:10px; padding:14px 12px; color:#fff;
+    display:flex; align-items:center; justify-content:space-between; cursor:pointer;
+  }
+  .banner b{ font-size:14px; display:block; }
+  .banner span{ font-size:10px; opacity:.88; display:block; margin-top:4px; }
+  .banner em{ font-size:30px; font-style:normal; opacity:.9; }
+  .promises{ display:flex; background:#fff; border-radius:10px; margin:10px; padding:10px 0; }
+  .promises div{ flex:1; display:flex; flex-direction:column; align-items:center; font-size:10px; color:var(--sub); gap:3px; }
+  .promises span{ font-size:14px; }
+  .sechead{ display:flex; align-items:baseline; justify-content:space-between; padding:2px 14px 4px; }
+  .sechead b{ font-size:15px; }
+  .sechead span{ font-size:11px; color:var(--muted); }
+  .grid{ display:grid; grid-template-columns:1fr 1fr; gap:8px; padding:8px 10px 0; }
+  .gitem{ background:#fff; border-radius:10px; padding:8px; cursor:pointer; }
+  .gitem .thumb{ width:100%; height:104px; }
+  .gitem .thumb .em{ font-size:38px; }
+  .gitem .flag{ position:absolute; left:5px; top:5px; background:rgba(194,65,12,.92); color:#fff; font-size:9px; padding:2px 5px; border-radius:3px; }
+  .gitem .name{ font-size:13px; font-weight:500; line-height:1.35; height:36px; margin-top:8px; overflow:hidden; }
+  .gitem .spec{ font-size:10px; color:var(--muted); margin-top:3px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .gitem .foot{ display:flex; align-items:center; justify-content:space-between; margin-top:7px; }
+  .gitem .add{
+    width:24px; height:24px; border-radius:50%; background:var(--primary); color:#fff;
+    display:flex; align-items:center; justify-content:center; font-size:16px; line-height:1; cursor:pointer;
+  }
+
+  /* ---------- 详情 ---------- */
+  .hero{ height:250px; display:flex; align-items:center; justify-content:center; position:relative; }
+  .hero .em{ font-size:100px; }
+  .hero .flag{ position:absolute; left:12px; bottom:12px; background:rgba(194,65,12,.92); color:#fff; font-size:11px; padding:4px 8px; border-radius:4px; }
+  .dtitle{ font-size:17px; font-weight:600; margin-top:8px; line-height:1.4; }
+  .dsub{ font-size:12px; color:var(--muted); margin-top:4px; }
+  .dsec{ font-size:13px; font-weight:600; display:flex; align-items:center; gap:6px; margin:14px 0 0; }
+  .dsec:first-child{ margin-top:0; }
+  .dsec i{ width:3px; height:13px; background:var(--primary); border-radius:2px; display:block; }
+  .dtext{ font-size:12.5px; color:var(--sub); line-height:1.75; margin-top:6px; }
+  .rxbox{ display:flex; gap:8px; margin:10px; padding:12px; background:#fff8f1; border:1px solid #ffdec2; border-radius:8px; }
+  .rxbox .t{ font-size:12px; font-weight:600; color:#c2410c; }
+  .rxbox .c{ font-size:11px; color:#8a6a52; line-height:1.7; margin-top:4px; }
+  .barbtns{ display:flex; gap:6px; flex:1; }
+  .barbtns .btn{ height:36px; font-size:13px; border-radius:18px; }
+  .barico{ width:46px; display:flex; flex-direction:column; align-items:center; gap:1px; font-size:16px; cursor:pointer; position:relative; }
+  .barico small{ font-size:9px; color:var(--sub); }
+
+  /* ---------- 购物车 / 订单 ---------- */
+  .check{
+    width:20px; height:20px; border-radius:50%; border:1px solid #cfd6dc; flex:0 0 auto;
+    display:flex; align-items:center; justify-content:center; font-size:12px; color:#fff; cursor:pointer;
+  }
+  .check.on{ background:var(--primary); border-color:var(--primary); }
+  .citem{ display:flex; align-items:center; gap:9px; padding:12px; position:relative; cursor:pointer; }
+  .citem+.citem{ border-top:1px solid #f2f4f5; }
+  .citem .thumb{ width:76px; height:76px; font-size:32px; }
+  .cbody{ flex:1; min-width:0; }
+  .cname{ font-size:13px; font-weight:500; line-height:1.35; }
+  .cspec{ font-size:10.5px; color:var(--muted); margin-top:3px; }
+  .cfoot{ display:flex; align-items:center; justify-content:space-between; margin-top:6px; }
+  .stepper{ display:flex; align-items:center; border:1px solid #e6eaed; border-radius:4px; overflow:hidden; }
+  .stepper b{ width:24px; height:22px; display:flex; align-items:center; justify-content:center; background:#f7f9fa; font-size:13px; color:var(--sub); cursor:pointer; font-weight:400; }
+  .stepper span{ width:32px; text-align:center; font-size:12px; }
+  .cdel{ position:absolute; right:8px; top:8px; color:#c2c8ce; font-size:12px; cursor:pointer; padding:2px 4px; }
+  .shiptip{ display:flex; align-items:center; gap:6px; background:var(--primary-light); color:var(--primary-dark); font-size:11.5px; padding:9px 12px; }
+  .rxtip{ display:flex; gap:6px; background:#fff8f1; color:#8a6a52; font-size:11px; padding:8px 12px; line-height:1.6; }
+  .sumline{ flex:1; text-align:right; }
+  .sumline .l{ font-size:11px; color:var(--sub); }
+  .sumline .s{ font-size:9.5px; color:var(--muted); }
+
+  .tabs{ display:flex; background:#fff; position:sticky; top:0; z-index:6; overflow-x:auto; }
+  .tabs::-webkit-scrollbar{ height:0; }
+  .tabs .t{
+    flex:0 0 auto; padding:12px 13px 10px; font-size:13px; color:var(--sub); cursor:pointer; position:relative;
+  }
+  .tabs .t.on{ color:var(--primary); font-weight:600; }
+  .tabs .t.on::after{ content:''; position:absolute; left:50%; transform:translateX(-50%); bottom:3px; width:20px; height:3px; border-radius:2px; background:var(--primary); }
+  .ohead{ display:flex; align-items:center; justify-content:space-between; padding:11px 12px; border-bottom:1px solid #f2f4f5; }
+  .ohead .no{ font-size:10.5px; color:var(--muted); }
+  .ohead .st{ font-size:12px; font-weight:600; }
+  .st.unpaid{ color:var(--danger); } .st.undelivered{ color:#f59e0b; }
+  .st.shipping{ color:#2563eb; } .st.done{ color:var(--primary); } .st.canceled{ color:var(--muted); }
+  .oitem{ display:flex; align-items:center; gap:8px; padding:10px 12px; cursor:pointer; }
+  .oitem+.oitem{ border-top:1px solid #f7f8f9; }
+  .oitem .thumb{ width:58px; height:58px; font-size:26px; }
+  .oitem .r{ margin-left:auto; text-align:right; font-size:12.5px; }
+  .oitem .r small{ display:block; color:var(--muted); font-size:10px; margin-top:3px; }
+  .ofoot{ display:flex; align-items:center; justify-content:space-between; padding:8px 12px 6px; border-top:1px solid #f2f4f5; }
+  .ofoot .time{ font-size:10px; color:#b6bdc4; }
+  .ofoot .total{ font-size:11px; color:var(--sub); }
+  .oactions{ display:flex; justify-content:flex-end; gap:8px; padding:6px 12px 12px; }
+  .obtn{ height:28px; padding:0 14px; border-radius:14px; border:1px solid #dfe3e6; font-size:11.5px; color:var(--sub); display:flex; align-items:center; cursor:pointer; background:#fff; }
+  .obtn.p{ border-color:var(--primary); color:var(--primary); background:#f2fbf7; }
+
+  /* ---------- 确认订单 ---------- */
+  .addr{ display:flex; align-items:center; gap:10px; cursor:pointer; }
+  .addr .n{ font-size:14px; font-weight:600; }
+  .addr .p{ font-size:11px; color:var(--muted); margin-left:6px; }
+  .addr .d{ font-size:11.5px; color:var(--sub); margin-top:4px; line-height:1.5; }
+  .rowtitle{ font-size:13px; font-weight:600; margin-bottom:8px; }
+  .upload{
+    height:72px; border:1px dashed #d5dde3; border-radius:6px; background:#fafbfc;
+    display:flex; flex-direction:column; align-items:center; justify-content:center; gap:4px;
+    font-size:12px; color:var(--muted); cursor:pointer;
+  }
+  .upload.ok{ border-color:var(--primary); background:var(--primary-light); color:var(--primary); }
+  .upload .plus{ font-size:18px; line-height:1; }
+  .note{ font-size:10px; color:#b6bdc4; margin-top:6px; line-height:1.6; }
+  textarea.remark{
+    width:100%; height:60px; border:none; background:#fafbfc; border-radius:6px; padding:8px;
+    font-size:12.5px; font-family:inherit; resize:none; outline:none;
+  }
+  .feerow{ display:flex; align-items:center; justify-content:space-between; padding:6px 0; font-size:12.5px; }
+  .feerow .k{ color:var(--sub); }
+  .feerow.total{ border-top:1px solid var(--line); margin-top:4px; padding-top:9px; }
+  .feerow.total .k{ color:var(--text); font-weight:600; }
+
+  /* ---------- 我的 / 登录 ---------- */
+  .minehero{ background:linear-gradient(160deg,#12996f,#17ab7c 60%,#45c79c); padding:18px 14px 0; color:#fff; }
+  .urow{ display:flex; align-items:center; gap:12px; cursor:pointer; }
+  .avatar{
+    width:56px; height:56px; border-radius:50%; background:rgba(255,255,255,.22);
+    border:1px solid rgba(255,255,255,.5); display:flex; align-items:center; justify-content:center; font-size:26px;
+  }
+  .urow .nm{ font-size:17px; font-weight:600; }
+  .urow .sb{ font-size:11px; opacity:.86; margin-top:4px; }
+  .quick{ display:flex; background:rgba(255,255,255,.16); border-radius:10px 10px 0 0; margin-top:16px; padding:11px 0; }
+  .quick div{ flex:1; text-align:center; }
+  .quick b{ font-size:16px; display:block; }
+  .quick span{ font-size:10px; opacity:.86; }
+  .otabs{ display:flex; padding:8px 0 13px; }
+  .otabs div{ flex:1; display:flex; flex-direction:column; align-items:center; gap:4px; font-size:11px; color:var(--sub); position:relative; cursor:pointer; }
+  .otabs .i{ font-size:21px; }
+  .otabs .b{ position:absolute; top:-2px; right:calc(50% - 20px); min-width:15px; height:15px; background:var(--danger); color:#fff; font-size:9px; line-height:15px; text-align:center; border-radius:8px; padding:0 3px; }
+  .menu .mi{ display:flex; align-items:center; gap:8px; padding:13px 12px; font-size:13px; cursor:pointer; }
+  .menu .mi+.mi{ border-top:1px solid #f2f4f5; }
+  .menu .mi .ar{ margin-left:auto; color:#c2c8ce; font-size:15px; }
+  .logout{ margin:14px 10px 0; background:#fff; border-radius:10px; height:44px; display:flex; align-items:center; justify-content:center; color:var(--danger); font-size:13px; cursor:pointer; }
+
+  .brand{ display:flex; flex-direction:column; align-items:center; padding:36px 0 22px; }
+  .brand .logo{
+    width:68px; height:68px; border-radius:18px; background:linear-gradient(135deg,#12996f,#45c79c);
+    display:flex; align-items:center; justify-content:center; font-size:32px;
+    box-shadow:0 8px 20px rgba(18,153,111,.28);
+  }
+  .brand b{ font-size:17px; margin-top:12px; }
+  .brand span{ font-size:11px; color:var(--muted); margin-top:5px; }
+  .avatars{ display:flex; gap:8px; margin-bottom:4px; }
+  .av2{
+    width:40px; height:40px; border-radius:50%; background:var(--bg); display:flex; align-items:center;
+    justify-content:center; font-size:19px; border:1px solid transparent; cursor:pointer;
+  }
+  .av2.on{ border-color:var(--primary); background:var(--primary-light); }
+  .field{ display:flex; align-items:center; border-bottom:1px solid #f2f4f5; padding:13px 0 10px; }
+  .field label{ width:60px; font-size:13px; }
+  .field input{ flex:1; border:none; outline:none; font-size:13px; font-family:inherit; background:transparent; }
+  .agree{ display:flex; align-items:center; gap:6px; padding:16px 4px 0; font-size:12px; color:var(--sub); cursor:pointer; }
+  .agree .link{ color:var(--primary); }
+  .actions2{ margin-top:22px; display:flex; flex-direction:column; gap:11px; }
+
+  /* ---------- 说明牌 ---------- */
+  .side{ width:300px; color:#3a4440; }
+  .side h1{ font-size:20px; margin:0 0 6px; }
+  .side p{ font-size:12.5px; line-height:1.9; color:#5a6661; margin:0 0 14px; }
+  .side ul{ margin:0; padding-left:18px; font-size:12.5px; line-height:1.9; color:#5a6661; }
+  .side .kbd{ background:#fff; border-radius:6px; padding:1px 6px; font-size:11px; color:#12996f; border:1px solid #d9e6e0; }
+  @media (max-width:900px){ body{ flex-direction:column; gap:24px; } .side{ width:390px; } }
+</style>
+</head>
+<body>
+
+<div class="phone">
+  <div class="statusbar"><span>9:41</span><span>●●●● 5G ▮</span></div>
+  <div class="navbar" id="navbar"><span id="navTitle">康宁大药房</span></div>
+  <div class="screen" id="screen"></div>
+  <div class="footer" id="footer"></div>
+  <div class="tabbar" id="tabbar"></div>
+</div>
+
+<div class="side">
+  <h1>康宁大药房 · 界面预览</h1>
+  <p>这是原生微信小程序项目的<strong>浏览器预览版</strong>，用于快速确认交互与视觉；真实运行请用微信开发者工具打开 <span class="kbd">medicine-mall-miniprogram</span> 目录。</p>
+  <ul>
+    <li>可点击操作：加购、改数量、勾选结算、下单、模拟支付/发货/收货</li>
+    <li>处方药会拦截结算，需先「上传处方」</li>
+    <li>数据保存在内存中，刷新页面会重置</li>
+    <li>商品与资质信息均为示例数据，不提供真实销售服务</li>
+  </ul>
+  <p style="margin-top:14px;">对应小程序页面：index / detail / cart / order-confirm / order / mine / login</p>
+</div>
+
+<script>
+/* ================= 数据 ================= */
+const GOODS = [
+  { id:1, name:'连花清瘟胶囊', spec:'0.35g×24粒/盒', factory:'石家庄以岭药业股份有限公司', cat:'cold', price:26.8, origin:33, sales:12860, rx:false, tag:'OTC', emoji:'🌿', color:'linear-gradient(135deg,#e6f7ee,#c8ebd9)',
+    effect:'清瘟解毒，宣肺泄热。用于治疗流行性感冒属热毒袭肺证，症见发热、恶风寒、肌肉酸痛、鼻塞流涕、咳嗽、头痛、咽干咽痛。',
+    usage:'口服。一次4粒，一日3次。', notice:'忌烟、酒及辛辣、生冷、油腻食物。不宜在服药期间同时服用滋补性中药。' },
+  { id:2, name:'布洛芬缓释胶囊', spec:'0.3g×20粒/盒', factory:'中美天津史克制药有限公司', cat:'cold', price:21.5, origin:25, sales:8742, rx:false, tag:'OTC', emoji:'💊', color:'linear-gradient(135deg,#eef2ff,#d9e0fb)',
+    effect:'用于缓解轻至中度疼痛，如头痛、关节痛、偏头痛、牙痛、肌肉痛、神经痛、痛经，也用于普通感冒或流行性感冒引起的发热。',
+    usage:'口服。成人一次1粒，一日2次（早晚各一次）。', notice:'本品为对症治疗药，用于止痛不得超过5天，用于解热不得超过3天。' },
+  { id:3, name:'感冒灵颗粒', spec:'10g×9袋/盒', factory:'华润三九医药股份有限公司', cat:'cold', price:15.9, origin:19.9, sales:20315, rx:false, tag:'OTC', emoji:'🍵', color:'linear-gradient(135deg,#fff4e6,#ffe1bf)',
+    effect:'解热镇痛。用于感冒引起的头痛、发热、鼻塞、流涕、咽痛。',
+    usage:'开水冲服。一次1袋，一日3次。', notice:'服药期间不得驾驶机、车、船，不得从事高空作业及操作精密仪器。' },
+  { id:4, name:'蒙脱石散', spec:'3g×10袋/盒', factory:'博福-益普生（天津）制药有限公司', cat:'stomach', price:18.6, origin:22, sales:6531, rx:false, tag:'OTC', emoji:'🥣', color:'linear-gradient(135deg,#f0f7ff,#d6e8fb)',
+    effect:'用于成人及儿童急、慢性腹泻。', usage:'口服。成人一次1袋，一日3次；儿童酌减或遵医嘱。', notice:'治疗急性腹泻时，应注意纠正脱水。' },
+  { id:5, name:'奥美拉唑肠溶胶囊', spec:'20mg×14粒/盒', factory:'阿斯利康制药有限公司', cat:'stomach', price:32, origin:38, sales:3420, rx:true, tag:'RX', emoji:'💊', color:'linear-gradient(135deg,#f3f0ff,#dfd8fb)',
+    effect:'用于胃溃疡、十二指肠溃疡、应激性溃疡、反流性食管炎及卓-艾综合征。',
+    usage:'口服。一次1粒，一日1次，晨起吞服或早晚各一次。请遵医嘱。', notice:'处方药，须凭执业医师处方购买，请在药师指导下使用。' },
+  { id:6, name:'盐酸二甲双胍片', spec:'0.5g×48片/盒', factory:'中美上海施贵宝制药有限公司', cat:'chronic', price:28.5, origin:34, sales:5120, rx:true, tag:'RX', emoji:'🧪', color:'linear-gradient(135deg,#eafaf5,#c9efe4)',
+    effect:'用于2型糖尿病，尤其适用于肥胖的2型糖尿病患者。',
+    usage:'口服。餐中或餐后服用，剂量需由医师根据血糖情况调整。', notice:'处方药。肾功能不全者禁用，用药期间定期监测血糖与肾功能。' },
+  { id:7, name:'阿莫西林胶囊', spec:'0.25g×24粒/盒', factory:'华北制药股份有限公司', cat:'chronic', price:12.8, origin:16, sales:9860, rx:true, tag:'RX', emoji:'💉', color:'linear-gradient(135deg,#eef7ff,#d4e9fb)',
+    effect:'适用于敏感菌所致的呼吸道感染、泌尿生殖道感染、皮肤软组织感染等。',
+    usage:'口服。成人一次2粒，每6-8小时1次。请遵医嘱。', notice:'处方药。青霉素过敏者禁用，使用前须做皮试或确认无过敏史。' },
+  { id:8, name:'维生素C泡腾片', spec:'1g×20片/瓶', factory:'拜耳医药保健有限公司', cat:'vitamin', price:39.9, origin:49, sales:7218, rx:false, tag:'HEALTH', emoji:'🍊', color:'linear-gradient(135deg,#fff8e6,#ffe6b8)',
+    effect:'补充维生素C，增强机体抵抗力，用于预防和治疗维生素C缺乏症。',
+    usage:'用冷水或温开水溶解后饮用，成人一日1片。', notice:'不宜长期过量服用；请勿直接吞服，以免损伤口腔黏膜。' },
+  { id:9, name:'钙片（碳酸钙D3）', spec:'60片/瓶', factory:'惠氏制药有限公司', cat:'vitamin', price:68, origin:88, sales:4390, rx:false, tag:'HEALTH', emoji:'🥛', color:'linear-gradient(135deg,#f6f7fb,#e2e6f2)',
+    effect:'用于妊娠和哺乳期妇女、更年期妇女、老年人等的钙补充，并帮助防治骨质疏松症。',
+    usage:'口服。一次1片，一日1-2次，餐后服用。', notice:'高钙血症、高尿酸血症患者禁用。' },
+  { id:10, name:'云南白药气雾剂', spec:'85g+30g/盒', factory:'云南白药集团股份有限公司', cat:'skin', price:45, origin:52, sales:6120, rx:false, tag:'OTC', emoji:'🧴', color:'linear-gradient(135deg,#eef6ff,#d3e6fb)',
+    effect:'活血散瘀，消肿止痛。用于跌打损伤、瘀血肿痛、肌肉酸痛及风湿疼痛。',
+    usage:'外用。喷于伤患处，一日3-5次。', notice:'仅供外用，切勿口服。皮肤破溃处禁用，避免接触眼睛、口腔等黏膜。' },
+  { id:11, name:'小儿氨酚黄那敏颗粒', spec:'6g×10袋/盒', factory:'哈药集团制药总厂', cat:'child', price:16.5, origin:20, sales:11240, rx:false, tag:'OTC', emoji:'🧒', color:'linear-gradient(135deg,#fff0f3,#ffd9e2)',
+    effect:'适用于缓解儿童普通感冒及流行性感冒引起的发热、头痛、四肢酸痛、打喷嚏、流鼻涕、鼻塞、咽痛等症状。',
+    usage:'温水冲服。1-3岁一次0.5-1袋，一日3次。', notice:'用药3-7天症状未缓解请咨询医师。' },
+  { id:12, name:'医用外科口罩', spec:'50只/盒（独立包装）', factory:'稳健医疗用品股份有限公司', cat:'device', price:29.9, origin:39.9, sales:30120, rx:false, tag:'OTC', emoji:'😷', color:'linear-gradient(135deg,#f2f6fa,#dde6ee)',
+    effect:'用于覆盖佩戴者的口鼻，阻隔飞沫、花粉、粉尘等颗粒物。',
+    usage:'一次性使用，建议连续佩戴不超过4小时。', notice:'一次性使用医疗器械，包装破损禁止使用。' }
+];
+
+const CATS = [
+  { id:'all', name:'全部' }, { id:'cold', name:'感冒发热' }, { id:'stomach', name:'肠胃用药' },
+  { id:'chronic', name:'慢病用药' }, { id:'vitamin', name:'维生素营养' },
+  { id:'skin', name:'皮肤外用' }, { id:'child', name:'儿童用药' }, { id:'device', name:'医疗器械' }
+];
+
+const BANNERS = [
+  { title:'换季常备药 满99减20', sub:'感冒发热 · 肠胃用药 专区', bg:'linear-gradient(135deg,#12996f,#4ec49a)', em:'🍃' },
+  { title:'慢病用药 长期处方续方', sub:'凭处方在线续方，药师审核', bg:'linear-gradient(135deg,#2563eb,#60a5fa)', em:'📋' },
+  { title:'家庭小药箱 清单推荐', sub:'一次配齐，应急不慌', bg:'linear-gradient(135deg,#f59e0b,#fbbf24)', em:'🧰' }
+];
+
+/* ================= 状态 ================= */
+const state = {
+  screen:'home',
+  tab:'home',
+  cat:'all',
+  keyword:'',
+  detailId:null,
+  cart:[],            // {id,count,selected}
+  orders:[],
+  user:null,
+  orderTab:'all',
+  remark:'',
+  rxFile:false,
+  loginBack:null,
+  toast:''
+};
+
+const ADDRESS = { name:'张明', phone:'138****6688', region:'上海市 浦东新区', detail:'张江路 88 号 3 号楼 502 室' };
+const STATUS_TEXT = { unpaid:'待付款', undelivered:'待发货', shipping:'待收货', done:'已完成', canceled:'已取消' };
+
+/* ================= 工具 ================= */
+const $ = id => document.getElementById(id);
+const m = n => Number(n).toFixed(2);
+const byId = id => GOODS.find(g => g.id === Number(id));
+const cartCount = () => state.cart.reduce((s,i) => s + i.count, 0);
+const cartTotal = () => state.cart.filter(i => i.selected).reduce((s,i) => s + byId(i.id).price * i.count, 0);
+const img = (g, size) => `<div class="thumb" style="background:${g.color};width:${size}px;height:${size}px;font-size:${size*0.42}px">${g.emoji}</div>`;
+
+function toast(msg){
+  const el = document.createElement('div');
+  el.textContent = msg;
+  el.style.cssText = 'position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);background:rgba(20,28,24,.86);color:#fff;padding:10px 16px;border-radius:8px;font-size:12.5px;z-index:99;max-width:70%;text-align:center;line-height:1.5';
+  document.querySelector('.phone').appendChild(el);
+  setTimeout(() => el.remove(), 1600);
+}
+
+/* ================= 渲染入口 ================= */
+function render(){
+  const s = $('screen');
+  const navTitles = { home:'康宁大药房', cart:'购物车', orders:'我的订单', mine:'我的',
+                      detail:'商品详情', confirm:'确认订单', login:'登录' };
+  $('navTitle').textContent = navTitles[state.screen] || '康宁大药房';
+  $('navbar').querySelector('.back')?.remove();
+  if (['detail','confirm','login'].includes(state.screen)){
+    const b = document.createElement('div');
+    b.className = 'back'; b.textContent = '‹';
+    b.onclick = () => A.back();
+    $('navbar').appendChild(b);
+  }
+
+  const map = { home:renderHome, detail:renderDetail, cart:renderCart,
+                confirm:renderConfirm, orders:renderOrders, mine:renderMine, login:renderLogin };
+  s.innerHTML = map[state.screen]();
+  s.scrollTop = 0;
+
+  // 底部操作栏移到滚动区之外，避免随内容滚动
+  const footer = $('footer');
+  footer.innerHTML = '';
+  const bar = s.querySelector('.bottombar');
+  if (bar) footer.appendChild(bar);
+
+  // 底部 tab
+  const tb = $('tabbar');
+  tb.classList.toggle('hide', ['detail','confirm','login'].includes(state.screen));
+  const n = cartCount();
+  tb.innerHTML = [
+    { k:'home', i:'🏠', t:'首页' },
+    { k:'cart', i:'🛒', t:'购物车', badge:n },
+    { k:'orders', i:'📋', t:'订单' },
+    { k:'mine', i:'👤', t:'我的' }
+  ].map(x => `<div class="tab ${state.tab===x.k?'on':''}" onclick="A.tab('${x.k}')">
+      <span class="ico">${x.i}</span>${x.t}
+      ${x.badge ? `<span class="badge">${x.badge > 99 ? '99+' : x.badge}</span>` : ''}
+    </div>`).join('');
+}
+
+/* ================= 页面：首页 ================= */
+function filteredGoods(){
+  const kw = state.keyword.trim();
+  return GOODS.filter(g => (state.cat === 'all' || g.cat === state.cat) &&
+    (!kw || (g.name + g.effect + g.factory).includes(kw)));
+}
+
+function goodsGridHTML(){
+  const list = filteredGoods();
+  if (!list.length) return `<div class="empty"><div class="ico">🔎</div><div class="txt">没有找到相关药品，换个关键词试试</div></div>`;
+  return `<div class="grid">
+    ${list.map(g => `<div class="gitem" onclick="A.detail(${g.id})">
+      <div class="thumb" style="background:${g.color}">
+        ${g.rx ? '<span class="flag">处方药</span>' : ''}
+        <span class="em">${g.emoji}</span>
+      </div>
+      <div class="name">${g.name}</div>
+      <div class="spec">${g.spec}</div>
+      <div class="foot">
+        <div class="price"><span class="s">¥</span><span class="n">${m(g.price)}</span>
+          <span class="line-through">¥${m(g.origin)}</span></div>
+        <div class="add" onclick="event.stopPropagation();A.add(${g.id})">＋</div>
+      </div>
+    </div>`).join('')}
+  </div>`;
+}
+
+function renderHome(){
+  return `
+  <div class="searchwrap">
+    <div class="searchbox">🔍
+      <input placeholder="搜索药品名称 / 症状" value="${state.keyword}"
+             oninput="A.search(this.value)" />
+    </div>
+    <div class="carticon" onclick="A.tab('cart')">🛒</div>
+  </div>
+
+  <div class="cats">
+    ${CATS.map(c => `<div class="cat ${state.cat===c.id?'on':''}" onclick="A.cat('${c.id}')">${c.name}</div>`).join('')}
+  </div>
+
+  <div class="banners">
+    ${BANNERS.map(b => `<div class="banner" style="background:${b.bg}" onclick="A.toast('活动页未接入')">
+        <div><b>${b.title}</b><span>${b.sub}</span></div><em>${b.em}</em>
+      </div>`).join('')}
+  </div>
+
+  <div class="promises">
+    <div><span>✅</span>正品保障</div>
+    <div><span>🚚</span>满99包邮</div>
+    <div><span>💬</span>药师咨询</div>
+    <div><span>↩️</span>7天退换</div>
+  </div>
+
+  <div class="sechead"><b>常用药品</b><span id="cnt">共 ${filteredGoods().length} 件</span></div>
+
+  <div id="gridWrap">${goodsGridHTML()}</div>
+
+  <div class="footnote">本页药品信息仅为演示数据，不作为用药依据；处方药须凭医师处方购买</div>
+  <div style="height:14px"></div>`;
+}
+
+/* ================= 页面：详情 ================= */
+function renderDetail(){
+  const g = byId(state.detailId);
+  if (!g) return `<div class="empty"><div class="txt">商品不存在</div></div>`;
+  return `
+  <div class="hero" style="background:${g.color}">
+    <span class="em">${g.emoji}</span>
+    ${g.rx ? '<span class="flag">处方药 · 需凭处方购买</span>' : ''}
+  </div>
+
+  <div class="card">
+    <div class="row" style="align-items:baseline">
+      <div class="price"><span class="s">¥</span><span class="n" style="font-size:25px">${m(g.price)}</span></div>
+      <span class="line-through">¥${m(g.origin)}</span>
+      <span style="margin-left:auto;font-size:11px;color:var(--muted)">已售 ${g.sales}</span>
+    </div>
+    <div class="dtitle">${g.name}</div>
+    <div class="dsub">${g.spec}</div>
+    <div style="margin-top:8px">
+      <span class="tag ${g.rx?'orange':(g.tag==='HEALTH'?'blue':'green')}">${g.rx?'处方药':(g.tag==='HEALTH'?'保健食品':'OTC 非处方药')}</span>
+      <span class="tag green">正品保障</span><span class="tag green">满99包邮</span>
+    </div>
+  </div>
+
+  <div class="card row"><span style="font-size:12.5px;color:var(--muted);width:64px">生产厂家</span>
+    <span style="font-size:12.5px">${g.factory}</span></div>
+
+  <div class="card">
+    <div class="dsec"><i></i>适应症 / 功能主治</div><div class="dtext">${g.effect}</div>
+    <div class="dsec"><i></i>用法用量</div><div class="dtext">${g.usage}</div>
+    <div class="dsec"><i></i>注意事项</div><div class="dtext">${g.notice}</div>
+  </div>
+
+  ${g.rx ? `<div class="rxbox"><span>📋</span><div>
+      <div class="t">该药品为处方药</div>
+      <div class="c">依据《药品管理法》与网络售药相关规定，处方药须凭执业医师处方购买。本演示项目未接入处方流转与药师审核流程。</div>
+    </div></div>` : ''}
+
+  <div class="pad-bottom"></div>
+  <div class="bottombar">
+    <div class="barico" onclick="A.tab('cart')">🛒<small>购物车</small></div>
+    <div class="barico" onclick="A.toast('演示未接入在线药师')">💬<small>问药师</small></div>
+    <div class="barbtns">
+      <button class="btn ghost" onclick="A.add(${g.id})">加入购物车</button>
+      <button class="btn primary" onclick="A.buyNow(${g.id})">立即购买</button>
+    </div>
+  </div>`;
+}
+
+/* ================= 页面：购物车 ================= */
+function renderCart(){
+  if (!state.cart.length){
+    return `<div class="empty"><div class="ico">🛒</div>
+      <div class="txt">购物车还是空的，去挑几件常备药吧</div>
+      <button class="btn primary" onclick="A.tab('home')">去逛逛</button></div>`;
+  }
+  const total = cartTotal();
+  const selCount = state.cart.filter(i => i.selected).reduce((s,i) => s + i.count, 0);
+  const allSel = state.cart.every(i => i.selected);
+  const hasRx = state.cart.some(i => i.selected && byId(i.id).rx);
+  const gap = total >= 99 ? 0 : 99 - total;
+
+  return `
+  <div class="shiptip">🚚 ${gap > 0 ? `再买 <b style="margin:0 3px">¥${m(gap)}</b> 即可免运费（满 99 元包邮）` : '已享满 99 元包邮服务'}</div>
+  ${hasRx ? `<div class="rxtip">📋<span>所选中含处方药，结算时需上传处方并由药师审核</span></div>` : ''}
+
+  <div class="card flush">
+    ${state.cart.map(it => {
+      const g = byId(it.id);
+      return `<div class="citem">
+        <div class="check ${it.selected?'on':''}" onclick="A.sel(${it.id})">${it.selected?'✓':''}</div>
+        ${img(g, 76)}
+        <div class="cbody">
+          <div class="cname">${g.name}</div>
+          <div class="cspec">${g.spec}</div>
+          ${g.rx ? '<div class="tag orange" style="margin-top:4px">处方药</div>' : ''}
+          <div class="cfoot">
+            <div class="price"><span class="s">¥</span><span class="n">${m(g.price*it.count)}</span></div>
+            <div class="stepper" onclick="event.stopPropagation()">
+              <b onclick="A.step(${it.id},-1)">−</b><span>${it.count}</span><b onclick="A.step(${it.id},1)">＋</b>
+            </div>
+          </div>
+        </div>
+        <div class="cdel" onclick="event.stopPropagation();A.del(${it.id})">✕</div>
+      </div>`;
+    }).join('')}
+  </div>
+
+  <div class="pad-bottom"></div>
+  <div class="bottombar">
+    <div class="row" style="gap:5px" onclick="A.selAll()">
+      <div class="check ${allSel?'on':''}">${allSel?'✓':''}</div>
+      <span style="font-size:11.5px;color:var(--sub)">全选</span>
+    </div>
+    <div class="sumline">
+      <div><span class="l">合计 </span><span class="price"><span class="s">¥</span><span class="n">${m(total)}</span></span></div>
+      <div class="s">不含运费，共 ${selCount} 件</div>
+    </div>
+    <button class="btn primary" style="width:118px;height:38px;font-size:13.5px;${selCount?'':'background:#dfe3e6;color:#a9b1b8'}"
+            onclick="A.checkout()">去结算${selCount?'('+selCount+')':''}</button>
+  </div>`;
+}
+
+/* ================= 页面：确认订单 ================= */
+function renderConfirm(){
+  const items = state.cart.filter(i => i.selected);
+  const goods = items.reduce((s,i) => s + byId(i.id).price * i.count, 0);
+  const freight = goods >= 99 ? 0 : 8;
+  const hasRx = items.some(i => byId(i.id).rx);
+
+  return `
+  <div class="card addr" onclick="A.toast('演示项目使用内置示例地址')">
+    <span style="font-size:15px">📍</span>
+    <div style="flex:1">
+      <div><span class="n">${ADDRESS.name}</span><span class="p">${ADDRESS.phone}</span></div>
+      <div class="d">${ADDRESS.region} ${ADDRESS.detail}</div>
+    </div>
+    <span style="color:#c2c8ce">›</span>
+  </div>
+
+  <div class="card flush">
+    ${items.map(it => { const g = byId(it.id); return `
+      <div class="oitem" style="cursor:default">
+        ${img(g, 58)}
+        <div style="flex:1;min-width:0">
+          <div class="cname">${g.name}</div>
+          <div class="cspec">${g.spec}</div>
+          ${g.rx ? '<div class="tag orange" style="margin-top:4px">处方药</div>' : ''}
+        </div>
+        <div class="r"><div class="price"><span class="s">¥</span><span class="n">${m(g.price*it.count)}</span></div><small>×${it.count}</small></div>
+      </div>`; }).join('')}
+  </div>
+
+  ${hasRx ? `<div class="card">
+    <div class="rowtitle">处方上传</div>
+    <div class="upload ${state.rxFile?'ok':''}" onclick="A.rx()">
+      <span class="plus">${state.rxFile?'✓':'＋'}</span>
+      <span>${state.rxFile?'已上传，待药师审核':'上传处方照片'}</span>
+    </div>
+    <div class="note">处方仅用于本次购药审核，审核通过后由药师复核发货</div>
+  </div>` : ''}
+
+  <div class="card">
+    <div class="rowtitle">订单备注</div>
+    <textarea class="remark" placeholder="选填，如：请放门口快递柜"
+      oninput="state.remark=this.value">${state.remark}</textarea>
+  </div>
+
+  <div class="card">
+    <div class="feerow"><span class="k">商品金额</span><span>¥${m(goods)}</span></div>
+    <div class="feerow"><span class="k">运费${freight?'':'（满99包邮）'}</span><span>${freight?'¥'+m(freight):'免运费'}</span></div>
+    <div class="feerow total"><span class="k">应付合计</span>
+      <span class="price"><span class="s">¥</span><span class="n">${m(goods+freight)}</span></span></div>
+  </div>
+
+  <div class="footnote" style="text-align:left;padding:0 24px">
+    下单即表示同意《用户购药协议》。药品属特殊商品，非质量问题拆封后不予退换；
+    处方药须凭有效处方购买，具体以药师审核结果为准。
+  </div>
+
+  <div class="pad-bottom"></div>
+  <div class="bottombar">
+    <div style="flex:1">
+      <div><span style="font-size:11px;color:var(--sub)">实付 </span>
+        <span class="price"><span class="s">¥</span><span class="n" style="font-size:18px">${m(goods+freight)}</span></span></div>
+      <div style="font-size:9.5px;color:var(--muted)">共 ${items.length} 种药品</div>
+    </div>
+    <button class="btn primary" style="width:130px;height:40px" onclick="A.submit()">提交订单</button>
+  </div>`;
+}
+
+/* ================= 页面：订单 ================= */
+function renderOrders(){
+  const tabs = [{id:'all',n:'全部'},{id:'unpaid',n:'待付款'},{id:'undelivered',n:'待发货'},
+                {id:'shipping',n:'待收货'},{id:'done',n:'已完成'}];
+  const list = state.orders.filter(o => state.orderTab === 'all' || o.status === state.orderTab);
+
+  const actions = o => {
+    if (o.status === 'unpaid') return `<div class="obtn" onclick="A.cancel('${o.no}')">取消订单</div>
+      <div class="obtn p" onclick="A.pay('${o.no}')">去支付</div>`;
+    if (o.status === 'undelivered') return `<div class="obtn" onclick="A.toast('已提醒商家发货')">提醒发货</div>
+      <div class="obtn p" onclick="A.ship('${o.no}')">模拟发货</div>`;
+    if (o.status === 'shipping') return `<div class="obtn" onclick="A.again('${o.no}')">再次购买</div>
+      <div class="obtn p" onclick="A.receive('${o.no}')">确认收货</div>`;
+    if (o.status === 'done') return `<div class="obtn" onclick="A.again('${o.no}')">再次购买</div>`;
+    return `<div class="obtn" onclick="A.again('${o.no}')">重新下单</div>`;
+  };
+
+  return `
+  <div class="tabs">
+    ${tabs.map(t => {
+      const c = t.id === 'all' ? 0 : state.orders.filter(o => o.status === t.id).length;
+      return `<div class="t ${state.orderTab===t.id?'on':''}" onclick="A.orderTab('${t.id}')">
+        ${t.n}${c?`<span style="font-size:9px;color:#fff;background:var(--danger);border-radius:8px;padding:0 3px;margin-left:2px;vertical-align:top">${c}</span>`:''}
+      </div>`;
+    }).join('')}
+  </div>
+
+  ${list.length ? list.map(o => `
+    <div class="card flush" style="margin-top:10px">
+      <div class="ohead">
+        <span class="no">${o.no}</span>
+        <span class="st ${o.status}">${STATUS_TEXT[o.status]}</span>
+      </div>
+      ${o.items.map(it => {
+        const g = byId(it.id);
+        return `<div class="oitem" onclick="A.detail(${g.id})">
+          ${img(g, 58)}
+          <div style="flex:1;min-width:0">
+            <div class="cname">${g.name}</div>
+            <div class="cspec">${g.spec}</div>
+            ${g.rx ? '<div class="tag orange" style="margin-top:4px">处方药</div>' : ''}
+          </div>
+          <div class="r">¥${m(g.price)}<small>×${it.count}</small></div>
+        </div>`;
+      }).join('')}
+      <div class="ofoot">
+        <span class="time">${o.timeText}</span>
+        <span class="total">共 ${o.items.reduce((s,i)=>s+i.count,0)} 件，实付
+          <span class="price"><span class="s">¥</span><span class="n" style="font-size:14px">${o.total}</span></span></span>
+      </div>
+      <div class="oactions">${actions(o)}</div>
+    </div>`).join('') : `
+    <div class="empty"><div class="ico">📦</div>
+      <div class="txt">${state.orderTab==='all'?'还没有订单，去挑点家庭常备药吧':'该状态下暂无订单'}</div>
+      <button class="btn primary" onclick="A.tab('home')">去逛逛</button></div>`}
+  <div style="height:16px"></div>`;
+}
+
+/* ================= 页面：我的 ================= */
+function renderMine(){
+  const u = state.user;
+  const c = k => state.orders.filter(o => o.status === k).length;
+  const phoneMask = u ? u.phone.replace(/^(\d{3})\d{4}(\d{4})$/, '$1****$2') : '';
+
+  return `
+  <div class="minehero">
+    <div class="urow" onclick="A.login()">
+      <div class="avatar">${u ? u.avatar : '👤'}</div>
+      <div style="flex:1">
+        <div class="nm">${u ? u.nickname : '点击登录'}</div>
+        <div class="sb">${u ? '已绑定 ' + phoneMask + ' · 普通会员' : '登录后可查看订单与用药记录'}</div>
+      </div>
+      ${u ? '' : '<span style="font-size:20px;opacity:.8">›</span>'}
+    </div>
+    <div class="quick">
+      <div onclick="A.tab('cart')"><b>${cartCount()}</b><span>购物车</span></div>
+      <div onclick="A.orderTab('all')"><b>${state.orders.length}</b><span>全部订单</span></div>
+      <div onclick="A.toast('暂无可用优惠券')"><b>0</b><span>优惠券</span></div>
+      <div onclick="A.toast('暂无问诊记录')"><b>0</b><span>问诊记录</span></div>
+    </div>
+  </div>
+
+  <div class="card flush" style="margin-top:10px">
+    <div class="sechead" style="padding:12px 12px 0">
+      <b>我的订单</b>
+      <span onclick="A.orderTab('all')" style="cursor:pointer">查看全部 ›</span>
+    </div>
+    <div class="otabs">
+      ${[['unpaid','💰','待付款'],['undelivered','📦','待发货'],['shipping','🚚','待收货'],['done','✅','已完成']]
+        .map(([k,i,t]) => `<div onclick="A.orderTab('${k}')"><span class="i">${i}</span>${t}
+          ${c(k)?`<span class="b">${c(k)}</span>`:''}</div>`).join('')}
+    </div>
+  </div>
+
+  <div class="card flush menu">
+    <div class="mi" onclick="A.toast('演示项目使用内置示例地址')"><span>📍</span>收货地址<span class="ar">›</span></div>
+    <div class="mi" onclick="A.toast('演示未接入互联网医院')"><span>💬</span>在线问诊 / 药师咨询<span class="ar">›</span></div>
+    <div class="mi" onclick="A.toast('暂无可用优惠券')"><span>🎟️</span>优惠券<span class="ar">›</span></div>
+    <div class="mi" onclick="A.help()"><span>❓</span>常见问题<span class="ar">›</span></div>
+    <div class="mi" onclick="A.about()"><span>ℹ️</span>关于我们<span class="ar">›</span></div>
+  </div>
+
+  ${u ? `<div class="logout" onclick="A.logout()">退出登录</div>` : ''}
+
+  <div class="footnote">
+    本小程序为演示项目，商品、价格、资质信息均为示例数据，不提供真实药品销售服务。
+    实际经营需取得《药品经营许可证》《互联网药品信息服务资格证书》等资质。
+  </div>`;
+}
+
+/* ================= 页面：登录 ================= */
+function renderLogin(){
+  const avatars = ['🙂','🐻','🌿','🐱','🦊','🍀'];
+  return `
+  <div class="brand">
+    <div class="logo">💊</div>
+    <b>康宁大药房</b>
+    <span>家庭常备药 · 正品直营 · 药师在线</span>
+  </div>
+
+  <div class="card">
+    <div style="font-size:12.5px;color:var(--sub);margin-bottom:8px">选择头像</div>
+    <div class="avatars">
+      ${avatars.map((a,i) => `<div class="av2 ${state.tmpAvatar===i?'on':''}" onclick="A.avatar(${i})">${a}</div>`).join('')}
+    </div>
+
+    <div class="field"><label>昵称</label>
+      <input id="inNick" placeholder="选填，默认「微信用户」" value="${state.tmpNick||''}"
+             oninput="state.tmpNick=this.value"></div>
+
+    <div class="field"><label>手机号</label>
+      <input id="inPhone" type="tel" maxlength="11" placeholder="请输入 11 位手机号"
+             value="${state.tmpPhone||''}" oninput="state.tmpPhone=this.value"></div>
+
+    <div class="note">手机号仅用于登录与订单通知，本地演示不做上传</div>
+  </div>
+
+  <div class="agree" onclick="state.agree=!state.agree;render()">
+    <div class="check ${state.agree?'on':''}">${state.agree?'✓':''}</div>
+    <div>我已阅读并同意 <span class="link" onclick="event.stopPropagation();A.agreement()">《用户协议与隐私说明》</span></div>
+  </div>
+
+  <div class="actions2">
+    <button class="btn primary" onclick="A.doLogin()">登录</button>
+    <button class="btn ghost" onclick="A.fillDemo()">一键填入示例资料</button>
+  </div>
+
+  <div class="footnote">
+    演示账号不会产生真实短信验证；正式项目建议使用 wx.login 换取 openid + 后端手机号解密，并做好频次限制与风控。
+  </div>`;
+}
+
+/* ================= 交互 ================= */
+const A = {
+  tab(k){
+    state.screen = k;
+    state.tab = k;
+    render();
+  },
+  cat(id){ state.cat = id; render(); },
+
+  /** 搜索时只局部更新列表，避免整页重渲染打断中文输入法 */
+  search(v){
+    state.keyword = v;
+    const wrap = $('gridWrap');
+    const cnt = $('cnt');
+    if (wrap) wrap.innerHTML = goodsGridHTML();
+    if (cnt) cnt.textContent = '共 ' + filteredGoods().length + ' 件';
+  },
+
+  detail(id){ state.detailId = id; state.screen = 'detail'; render(); },
+  back(){
+    if (state.screen === 'confirm') { state.screen = 'cart'; state.tab = 'cart'; }
+    else if (state.screen === 'login') { state.screen = state.loginBack || 'mine'; state.tab = state.loginBack || 'mine'; }
+    else { state.screen = 'home'; state.tab = 'home'; }
+    render();
+  },
+
+  add(id){
+    const g = byId(id);
+    const hit = state.cart.find(i => i.id === id);
+    if (hit) hit.count = Math.min(hit.count + 1, 99);
+    else state.cart.push({ id, count:1, selected:true });
+    toast(g.rx ? '已加入，结算需上传处方' : '已加入购物车');
+    render();
+  },
+
+  buyNow(id){
+    A.add(id);
+    state.screen = 'cart'; state.tab = 'cart'; render();
+  },
+
+  sel(id){
+    const it = state.cart.find(i => i.id === id);
+    it.selected = !it.selected; render();
+  },
+  selAll(){
+    const all = state.cart.every(i => i.selected);
+    state.cart.forEach(i => i.selected = !all); render();
+  },
+  step(id, d){
+    const it = state.cart.find(i => i.id === id);
+    it.count = Math.max(1, Math.min(99, it.count + d));
+    if (it.count === 99 && d > 0) toast('单件最多 99 件');
+    render();
+  },
+  del(id){
+    if (!confirm('确定要删除这件药品吗？')) return;
+    state.cart = state.cart.filter(i => i.id !== id);
+    toast('已删除'); render();
+  },
+
+  checkout(){
+    const sel = state.cart.filter(i => i.selected);
+    if (!sel.length) return toast('请先勾选要结算的药品');
+    if (!state.user){
+      state.loginBack = 'cart';
+      state.screen = 'login'; render(); return;
+    }
+    state.remark = ''; state.rxFile = false;
+    state.screen = 'confirm'; render();
+  },
+
+  rx(){ state.rxFile = true; toast('处方已上传，待药师审核'); render(); },
+
+  submit(){
+    const items = state.cart.filter(i => i.selected);
+    const hasRx = items.some(i => byId(i.id).rx);
+    if (hasRx && !state.rxFile) return toast('含处方药，请先上传处方');
+
+    const goods = items.reduce((s,i) => s + byId(i.id).price * i.count, 0);
+    const freight = goods >= 99 ? 0 : 8;
+    const d = new Date();
+    const p = n => String(n).padStart(2,'0');
+    state.orders.unshift({
+      no: 'KN' + d.getFullYear() + p(d.getMonth()+1) + p(d.getDate()) + p(d.getHours()) + p(d.getMinutes()) + Math.floor(Math.random()*9000+1000),
+      timeText: `${d.getFullYear()}-${p(d.getMonth()+1)}-${p(d.getDate())} ${p(d.getHours())}:${p(d.getMinutes())}`,
+      status:'unpaid',
+      items: items.map(i => ({ id:i.id, count:i.count })),
+      total: m(goods + freight)
+    });
+    const ids = items.map(i => i.id);
+    state.cart = state.cart.filter(i => !ids.includes(i.id));
+    state.screen = 'orders'; state.tab = 'orders'; state.orderTab = 'all';
+    render(); toast('下单成功');
+  },
+
+  orderTab(k){ state.orderTab = k; state.screen = 'orders'; state.tab='orders'; render(); },
+
+  pay(no){
+    if (!confirm('模拟支付：演示项目不接入真实支付，正式上线需调用 wx.requestPayment。')) return;
+    state.orders.find(o => o.no === no).status = 'undelivered';
+    toast('支付成功'); render();
+  },
+  cancel(no){
+    if (!confirm('确定要取消这笔订单吗？')) return;
+    state.orders.find(o => o.no === no).status = 'canceled';
+    toast('订单已取消'); render();
+  },
+  ship(no){
+    state.orders.find(o => o.no === no).status = 'shipping';
+    toast('商家已发货（演示）'); render();
+  },
+  receive(no){
+    if (!confirm('请确认已收到药品并核对无误。')) return;
+    state.orders.find(o => o.no === no).status = 'done';
+    toast('已确认收货'); render();
+  },
+  again(no){
+    const o = state.orders.find(o => o.no === no);
+    o.items.forEach(it => {
+      const hit = state.cart.find(c => c.id === it.id);
+      if (hit) hit.count = Math.min(hit.count + it.count, 99);
+      else state.cart.push({ id:it.id, count:it.count, selected:true });
+    });
+    state.screen = 'cart'; state.tab = 'cart';
+    render(); toast('已加入购物车');
+  },
+
+  login(){
+    if (state.user) return;
+    state.loginBack = state.tab || 'mine';
+    state.screen = 'login'; render();
+  },
+  avatar(i){ state.tmpAvatar = i; render(); },
+  fillDemo(){
+    state.tmpNick = '微信用户_小城'; state.tmpPhone = '13800136688'; state.agree = true;
+    render(); toast('已填入示例资料');
+  },
+  doLogin(){
+    if (!state.agree) return toast('请先阅读并同意用户协议');
+    if (!/^1[3-9]\d{9}$/.test(state.tmpPhone || '')) return toast('请输入正确的 11 位手机号');
+    const avatars = ['🙂','🐻','🌿','🐱','🦊','🍀'];
+    state.user = {
+      nickname: (state.tmpNick || '').trim() || '微信用户',
+      phone: state.tmpPhone,
+      avatar: avatars[state.tmpAvatar || 0]
+    };
+    const back = state.loginBack || 'mine';
+    state.screen = back; state.tab = back;
+    render(); toast('登录成功');
+  },
+  logout(){
+    if (!confirm('退出后购物车与订单记录仍保留在本地。')) return;
+    state.user = null; toast('已退出登录'); render();
+  },
+  agreement(){
+    alert('本演示小程序仅在本地保存昵称与手机号用于展示登录态，不上传服务器。\n\n真实项目应：\n① 明示收集目的与范围；\n② 提供隐私政策与撤回同意入口；\n③ 手机号等敏感信息加密存储；\n④ 不收集与购药无关的信息。');
+  },
+  help(){
+    alert('常见问题\n\n1. 处方药如何购买？\n下单时上传处方，药师审核通过后发货。\n\n2. 药品能否退换？\n非质量问题拆封后不予退换。\n\n3. 多久发货？\n现货 24 小时内发出。');
+  },
+  about(){
+    alert('康宁大药房（演示项目）\n\n本小程序为教学/演示用途，商品与资质信息均为示例数据，不提供真实销售服务。');
+  },
+  toast
+};
+
+/* 初始化：预置一个待收货订单，方便查看订单页 */
+(function init(){
+  state.tmpAvatar = 0; state.agree = false;
+  render();
+})();
+</script>
+</body>
+</html>

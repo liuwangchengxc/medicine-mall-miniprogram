@@ -1,0 +1,108 @@
+/* ============ 全局设计变量 ============ */
+page {
+  --primary: #12996f;
+  --primary-dark: #0d7d5b;
+  --primary-light: #e8f6f0;
+  --danger: #e34d59;
+  --text-1: #1f2329;
+  --text-2: #5c6670;
+  --text-3: #9aa3ab;
+  --line: #eef0f2;
+  --bg: #f4f6f5;
+
+  background: var(--bg);
+  color: var(--text-1);
+  font-size: 28rpx;
+  font-family: -apple-system, "PingFang SC", "Helvetica Neue", sans-serif;
+  line-height: 1.5;
+}
+
+view, text, input, textarea, scroll-view { box-sizing: border-box; }
+
+/* ============ 通用卡片 ============ */
+.card {
+  background: #fff;
+  border-radius: 20rpx;
+  padding: 24rpx;
+  margin: 20rpx;
+}
+.card-flat {
+  background: #fff;
+  border-radius: 20rpx;
+  margin: 20rpx;
+  overflow: hidden;
+}
+
+/* ============ 文字 ============ */
+.t-title { font-size: 32rpx; font-weight: 600; color: var(--text-1); }
+.t-sub { font-size: 24rpx; color: var(--text-3); }
+.price { color: var(--danger); font-weight: 600; }
+.price .symbol { font-size: 24rpx; }
+.price .num { font-size: 36rpx; }
+.price-gray { color: var(--text-3); font-size: 22rpx; text-decoration: line-through; margin-left: 8rpx; }
+
+/* ============ 按钮 ============ */
+.btn {
+  height: 88rpx;
+  line-height: 88rpx;
+  text-align: center;
+  border-radius: 44rpx;
+  font-size: 30rpx;
+  font-weight: 500;
+}
+.btn-primary { background: var(--primary); color: #fff; }
+.btn-primary:active { background: var(--primary-dark); }
+.btn-ghost { background: #fff; color: var(--primary); border: 1rpx solid var(--primary); }
+.btn-plain { background: #fff; color: var(--text-2); border: 1rpx solid #dfe3e6; }
+.btn-disabled { background: #dfe3e6; color: #a9b1b8; }
+
+/* ============ 空状态 ============ */
+.empty {
+  padding: 140rpx 40rpx;
+  text-align: center;
+}
+.empty .ico { font-size: 96rpx; opacity: 0.55; }
+.empty .txt { margin-top: 20rpx; color: var(--text-3); font-size: 26rpx; }
+.empty .btn { display: inline-block; padding: 0 60rpx; margin-top: 32rpx; }
+
+/* ============ 分割线 ============ */
+.divider { height: 1rpx; background: var(--line); }
+
+/* ============ 底部固定操作栏 ============ */
+.bottom-bar {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  background: #fff;
+  padding: 16rpx 24rpx;
+  padding-bottom: calc(16rpx + env(safe-area-inset-bottom));
+  box-shadow: 0 -2rpx 16rpx rgba(0, 0, 0, 0.04);
+  z-index: 20;
+}
+
+/* ============ 标签 ============ */
+.tag {
+  display: inline-block;
+  font-size: 20rpx;
+  line-height: 1;
+  padding: 6rpx 10rpx;
+  border-radius: 6rpx;
+  margin-right: 8rpx;
+}
+.tag-otc { color: #12996f; background: #e8f6f0; }
+.tag-rx { color: #c2410c; background: #fff1e6; }
+.tag-health { color: #2563eb; background: #eaf1ff; }
+
+/* ============ 商品缩略占位 ============ */
+.thumb {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 16rpx;
+  position: relative;
+  overflow: hidden;
+}
+.thumb .thumb-emoji { font-size: 64rpx; }

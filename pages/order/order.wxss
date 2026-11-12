@@ -1,0 +1,124 @@
+.page { padding-bottom: 40rpx; }
+
+/* ---------- 状态筛选 ---------- */
+.tabs {
+  display: flex;
+  white-space: nowrap;
+  background: #fff;
+  padding: 0 12rpx;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+.tab {
+  flex-shrink: 0;
+  position: relative;
+  padding: 26rpx 26rpx 22rpx;
+  font-size: 28rpx;
+  color: #5c6670;
+}
+.tab.on {
+  color: #12996f;
+  font-weight: 600;
+}
+.tab.on::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  bottom: 6rpx;
+  transform: translateX(-50%);
+  width: 40rpx;
+  height: 6rpx;
+  border-radius: 3rpx;
+  background: #12996f;
+}
+.tab-dot {
+  font-size: 18rpx;
+  color: #fff;
+  background: #e34d59;
+  padding: 0 6rpx;
+  border-radius: 12rpx;
+  margin-left: 4rpx;
+  vertical-align: top;
+}
+
+/* ---------- 订单卡片 ---------- */
+.order { padding: 0 24rpx 20rpx; }
+.o-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 22rpx 0 16rpx;
+  border-bottom: 1rpx solid #f2f4f5;
+}
+.o-no { font-size: 22rpx; color: #9aa3ab; }
+.o-status { font-size: 24rpx; font-weight: 600; }
+.s-unpaid { color: #e34d59; }
+.s-undelivered { color: #f59e0b; }
+.s-shipping { color: #2563eb; }
+.s-done { color: #12996f; }
+.s-canceled { color: #9aa3ab; }
+
+.o-item {
+  display: flex;
+  align-items: center;
+  padding: 20rpx 0;
+}
+.o-item + .o-item { border-top: 1rpx solid #f7f8f9; }
+.o-thumb { width: 120rpx; height: 120rpx; flex-shrink: 0; }
+.o-body { flex: 1; margin-left: 16rpx; min-width: 0; }
+.o-name {
+  font-size: 27rpx;
+  font-weight: 500;
+  line-height: 1.4;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+.o-spec { font-size: 21rpx; color: #9aa3ab; margin-top: 4rpx; }
+.o-rx {
+  display: inline-block;
+  font-size: 19rpx;
+  color: #c2410c;
+  background: #fff1e6;
+  padding: 2rpx 8rpx;
+  border-radius: 4rpx;
+  margin-top: 6rpx;
+}
+.o-right { text-align: right; margin-left: 10rpx; }
+.o-price { font-size: 26rpx; color: #1f2329; }
+.o-count { font-size: 21rpx; color: #9aa3ab; margin-top: 4rpx; }
+
+/* ---------- 金额 ---------- */
+.o-sum {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16rpx 0 6rpx;
+  border-top: 1rpx solid #f2f4f5;
+}
+.o-time { font-size: 20rpx; color: #b6bdc4; }
+.o-total { font-size: 22rpx; color: #5c6670; }
+
+/* ---------- 操作 ---------- */
+.o-actions {
+  display: flex;
+  justify-content: flex-end;
+  padding-top: 14rpx;
+}
+.o-btn {
+  height: 60rpx;
+  line-height: 58rpx;
+  padding: 0 28rpx;
+  border-radius: 30rpx;
+  border: 1rpx solid #dfe3e6;
+  font-size: 24rpx;
+  color: #5c6670;
+  margin-left: 16rpx;
+}
+.o-btn-primary {
+  border-color: #12996f;
+  color: #12996f;
+  background: #f2fbf7;
+}

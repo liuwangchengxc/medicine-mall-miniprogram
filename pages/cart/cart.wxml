@@ -1,0 +1,81 @@
+<view class="page">
+
+  <!-- 包邮提示 -->
+  <view class="ship-tip" wx:if="{{items.length > 0}}">
+    <text class="ship-ico">🚚</text>
+    <text wx:if="{{freeGap !== '0.00'}}">再买 <text class="hl">¥{{freeGap}}</text> 即可免运费（满 99 元包邮）</text>
+    <text wx:else>已享满 99 元包邮服务</text>
+  </view>
+
+  <!-- 处方药提示 -->
+  <view class="rx-bar" wx:if="{{hasRx}}">
+    <text>📋</text>
+    <text class="rx-bar-txt">所选中含处方药，结算时需上传处方并由药师审核</text>
+  </view>
+
+  <!-- 购物车列表 -->
+  <view class="card-flat" wx:if="{{items.length > 0}}">
+    <view class="c-item" wx:for="{{items}}" wx:key="id">
+      <!-- 勾选 -->
+      <view class="check {{item.selected ? 'on' : ''}}" data-id="{{item.id}}" bindtap="toggle">
+        <text wx:if="{{item.selected}}" class="check-ico">✓</text>
+      </view>
+
+      <!-- 缩略图 -->
+      <view class="thumb c-thumb" style="background:{{item.goods.color}}" data-id="{{item.id}}" bindtap="goDetail">
+        <text class="thumb-emoji">{{item.goods.emoji}}</text>
+      </view>
+
+      <!-- 信息 -->
+      <view class="c-body">
+        <view class="c-name" data-id="{{item.id}}" bindtap="goDetail">{{item.goods.name}}</view>
+        <view class="c-spec">{{item.goods.spec}}</view>
+        <view class="c-rx" wx:if="{{item.goods.rx}}">处方药</view>
+        <view class="c-foot">
+          <view class="price">
+            <text class="symbol">¥</text><text class="num">{{item.subtotal}}</text>
+          </view>
+          <view class="stepper">
+            <view class="step-btn" data-id="{{item.id}}" data-count="{{item.count}}" bindtap="minus">−</view>
+            <view class="step-num">{{item.count}}</view>
+            <view class="step-btn" data-id="{{item.id}}" data-count="{{item.count}}" bindtap="plus">＋</view>
+          </view>
+        </view>
+      </view>
+
+      <!-- 删除 -->
+      <view class="c-del" data-id="{{item.id}}" bindtap="remove">✕</view>
+    </view>
+  </view>
+
+  <!-- 空状态 -->
+  <view class="empty" wx:else>
+    <view class="ico">🛒</view>
+    <view class="txt">购物车还是空的，去挑几件常备药吧</view>
+    <view class="btn btn-primary" bindtap="goIndex">去逛逛</view>
+  </view>
+
+  <!-- 底部占位 -->
+  <view class="bottom-holder" wx:if="{{items.length > 0}}"></view>
+
+  <!-- 结算栏 -->
+  <view class="bottom-bar" wx:if="{{items.length > 0}}">
+    <view class="all" bindtap="toggleAll">
+      <view class="check {{allSelected ? 'on' : ''}}">
+        <text wx:if="{{allSelected}}" class="check-ico">✓</text>
+      </view>
+      <text class="all-txt">全选</text>
+    </view>
+    <view class="sum">
+      <view class="sum-line">
+        <text class="sum-label">合计</text>
+        <text class="price"><text class="symbol">¥</text><text class="num">{{total}}</text></text>
+      </view>
+      <view class="sum-sub">不含运费，共 {{selectedCount}} 件</view>
+    </view>
+    <view class="btn btn-primary pay-btn {{selectedCount === 0 ? 'btn-disabled' : ''}}" bindtap="checkout">
+      去结算{{selectedCount > 0 ? '(' + selectedCount + ')' : ''}}
+    </view>
+  </view>
+
+</view>

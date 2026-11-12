@@ -1,0 +1,102 @@
+<view class="page">
+
+  <!-- 收货地址 -->
+  <view class="card addr" bindtap="editAddress">
+    <text class="addr-ico">📍</text>
+    <view class="addr-body">
+      <view class="addr-top">
+        <text class="addr-name">{{address.name}}</text>
+        <text class="addr-phone">{{address.phone}}</text>
+      </view>
+      <view class="addr-detail">{{address.region}} {{address.detail}}</view>
+    </view>
+    <text class="addr-arrow">›</text>
+  </view>
+
+  <!-- 商品清单 -->
+  <view class="card-flat">
+    <view class="oc-item" wx:for="{{items}}" wx:key="id">
+      <view class="thumb oc-thumb" style="background:{{item.goods.color}}">
+        <text class="thumb-emoji">{{item.goods.emoji}}</text>
+      </view>
+      <view class="oc-body">
+        <view class="oc-name">{{item.goods.name}}</view>
+        <view class="oc-spec">{{item.goods.spec}}</view>
+        <view class="oc-rx" wx:if="{{item.goods.rx}}">处方药</view>
+      </view>
+      <view class="oc-right">
+        <view class="price"><text class="symbol">¥</text><text class="num">{{item.subtotal}}</text></view>
+        <view class="oc-count">×{{item.count}}</view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 处方上传 -->
+  <view class="card" wx:if="{{hasRx}}">
+    <view class="row-title">处方上传</view>
+    <view class="rx-upload" bindtap="uploadRx">
+      <block wx:if="{{!rxFile}}">
+        <text class="rx-upload-ico">＋</text>
+        <text class="rx-upload-txt">上传处方照片</text>
+      </block>
+      <block wx:else>
+        <text class="rx-upload-ico ok">✓</text>
+        <text class="rx-upload-txt ok">已上传，待药师审核</text>
+      </block>
+    </view>
+    <view class="rx-note">处方仅用于本次购药审核，审核通过后由药师复核发货</view>
+  </view>
+
+  <!-- 备注 -->
+  <view class="card">
+    <view class="row-title">订单备注</view>
+    <textarea
+      class="remark"
+      placeholder="选填，如：请放门口快递柜"
+      placeholder-class="remark-ph"
+      maxlength="60"
+      value="{{remark}}"
+      bindinput="onRemark"
+    />
+  </view>
+
+  <!-- 金额明细 -->
+  <view class="card">
+    <view class="fee-row">
+      <text class="fee-label">商品金额</text>
+      <text class="fee-val">¥{{goodsAmount}}</text>
+    </view>
+    <view class="fee-row">
+      <text class="fee-label">运费{{freight === '0.00' ? '（满99包邮）' : ''}}</text>
+      <text class="fee-val">{{freight === '0.00' ? '免运费' : '¥' + freight}}</text>
+    </view>
+    <view class="divider"></view>
+    <view class="fee-row total">
+      <text class="fee-label">应付合计</text>
+      <text class="price"><text class="symbol">¥</text><text class="num">{{total}}</text></text>
+    </view>
+  </view>
+
+  <!-- 安全提示 -->
+  <view class="safe-tip">
+    下单即表示同意《用户购药协议》。药品属特殊商品，非质量问题拆封后不予退换；
+    处方药须凭有效处方购买，具体以药师审核结果为准。
+  </view>
+
+  <view class="bottom-holder"></view>
+
+  <!-- 提交栏 -->
+  <view class="bottom-bar">
+    <view class="pay-info">
+      <view class="pay-line">
+        <text class="pay-label">实付</text>
+        <text class="price"><text class="symbol">¥</text><text class="num">{{total}}</text></text>
+      </view>
+      <view class="pay-sub">共 {{items.length}} 种药品</view>
+    </view>
+    <view class="btn btn-primary submit-btn {{submitting ? 'btn-disabled' : ''}}" bindtap="submit">
+      {{submitting ? '提交中…' : '提交订单'}}
+    </view>
+  </view>
+
+</view>

@@ -1,0 +1,88 @@
+<view class="page" wx:if="{{goods}}">
+
+  <!-- 主图区（占位，可替换为 swiper 轮播） -->
+  <view class="hero" style="background:{{goods.color}}">
+    <text class="hero-emoji">{{goods.emoji}}</text>
+    <view class="hero-flag" wx:if="{{goods.rx}}">处方药 · 需凭处方购买</view>
+  </view>
+
+  <!-- 价格与标题 -->
+  <view class="card">
+    <view class="price-row">
+      <view class="price">
+        <text class="symbol">¥</text><text class="num big">{{priceText}}</text>
+      </view>
+      <text class="price-gray" wx:if="{{originText}}">¥{{originText}}</text>
+      <view class="sales">已售 {{goods.sales}}</view>
+    </view>
+    <view class="title">{{goods.name}}</view>
+    <view class="sub-line">{{goods.spec}}</view>
+    <view class="tag-row">
+      <text class="tag {{goods.rx ? 'tag-rx' : (goods.tag === 'HEALTH' ? 'tag-health' : 'tag-otc')}}">
+        {{goods.rx ? '处方药' : (goods.tag === 'HEALTH' ? '保健食品' : 'OTC 非处方药')}}
+      </text>
+      <text class="tag tag-otc">正品保障</text>
+      <text class="tag tag-otc">满99包邮</text>
+    </view>
+  </view>
+
+  <!-- 厂商信息 -->
+  <view class="card info-row">
+    <text class="info-label">生产厂家</text>
+    <text class="info-value">{{goods.factory}}</text>
+  </view>
+
+  <!-- 药品说明 -->
+  <view class="card">
+    <view class="block-title">
+      <text class="bar"></text>
+      <text>适应症 / 功能主治</text>
+    </view>
+    <view class="block-text">{{goods.effect}}</view>
+
+    <view class="block-title">
+      <text class="bar"></text>
+      <text>用法用量</text>
+    </view>
+    <view class="block-text">{{goods.usage}}</view>
+
+    <view class="block-title">
+      <text class="bar"></text>
+      <text>注意事项</text>
+    </view>
+    <view class="block-text">{{goods.notice}}</view>
+  </view>
+
+  <!-- 处方药提示 -->
+  <view class="rx-tip" wx:if="{{goods.rx}}">
+    <text class="rx-tip-ico">📋</text>
+    <view class="rx-tip-body">
+      <view class="rx-tip-title">该药品为处方药</view>
+      <view class="rx-tip-text">
+        依据《药品管理法》与网络售药相关规定，处方药须凭执业医师处方购买。
+        本演示项目未接入处方流转与药师审核流程，正式上线需对接互联网医院或实体处方。
+      </view>
+    </view>
+  </view>
+
+  <!-- 底部占位，避免遮挡 -->
+  <view class="bottom-holder"></view>
+
+  <!-- 底部操作栏 -->
+  <view class="bottom-bar">
+    <view class="bar-ico" bindtap="goCart">
+      <text class="bar-ico-emoji">🛒</text>
+      <text class="bar-ico-txt">购物车</text>
+      <text wx:if="{{cartCount > 0}}" class="bar-badge">{{cartCount}}</text>
+    </view>
+    <view class="bar-ico" bindtap="consult">
+      <text class="bar-ico-emoji">💬</text>
+      <text class="bar-ico-txt">问药师</text>
+    </view>
+    <view class="bar-btns">
+      <view class="btn btn-ghost bar-btn" bindtap="addCart">加入购物车</view>
+      <view class="btn btn-primary bar-btn" bindtap="buyNow">立即购买</view>
+    </view>
+  </view>
+
+</view>

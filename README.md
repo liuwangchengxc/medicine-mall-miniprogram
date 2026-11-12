@@ -7,6 +7,8 @@
 - 真实项目接入后端时，只需替换 `utils/store.js` 内的读写实现（接口化），页面调用方式不变
 - 附带 `preview.html`：浏览器直接打开即可预览交互（无需微信开发者工具）
 
+**🔗 在线预览（GitHub Pages）**：https://liuwangchengxc.github.io/medicine-mall-miniprogram/
+
 ## 目录结构
 
 ```
@@ -67,7 +69,10 @@ medicine-mall-miniprogram/
 
 ---
 
-## 部署到 GitHub Pages
+## 部署到 GitHub Pages（本项目已完成部署）
+
+> 当前站点：https://liuwangchengxc.github.io/medicine-mall-miniprogram/
+> 配置：仓库 `liuwangchengxc/medicine-mall-miniprogram`，Pages source = `main` 分支 `/docs` 目录
 
 ### 能部署什么、不能部署什么
 

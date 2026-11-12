@@ -267,13 +267,7 @@
   .agree .link{ color:var(--primary); }
   .actions2{ margin-top:22px; display:flex; flex-direction:column; gap:11px; }
 
-  /* ---------- 说明牌 ---------- */
-  .side{ width:300px; color:#3a4440; }
-  .side h1{ font-size:20px; margin:0 0 6px; }
-  .side p{ font-size:12.5px; line-height:1.9; color:#5a6661; margin:0 0 14px; }
-  .side ul{ margin:0; padding-left:18px; font-size:12.5px; line-height:1.9; color:#5a6661; }
-  .side .kbd{ background:#fff; border-radius:6px; padding:1px 6px; font-size:11px; color:#12996f; border:1px solid #d9e6e0; }
-  @media (max-width:900px){ body{ flex-direction:column; gap:24px; } .side{ width:390px; } }
+  @media (max-width:900px){ body{ padding:16px; } .phone{ transform-origin:top center; } }
 </style>
 </head>
 <body>
@@ -284,18 +278,6 @@
   <div class="screen" id="screen"></div>
   <div class="footer" id="footer"></div>
   <div class="tabbar" id="tabbar"></div>
-</div>
-
-<div class="side">
-  <h1>康宁大药房 · 界面预览</h1>
-  <p>这是原生微信小程序项目的<strong>浏览器预览版</strong>，用于快速确认交互与视觉；真实运行请用微信开发者工具打开 <span class="kbd">medicine-mall-miniprogram</span> 目录。</p>
-  <ul>
-    <li>可点击操作：加购、改数量、勾选结算、下单、模拟支付/发货/收货</li>
-    <li>处方药会拦截结算，需先「上传处方」</li>
-    <li>数据保存在内存中，刷新页面会重置</li>
-    <li>商品与资质信息均为示例数据，不提供真实销售服务</li>
-  </ul>
-  <p style="margin-top:14px;">对应小程序页面：index / detail / cart / order-confirm / order / mine / login</p>
 </div>
 
 <script>
